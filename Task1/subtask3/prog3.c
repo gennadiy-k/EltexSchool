@@ -15,7 +15,6 @@ int main() {
             printf("0");
         }
     }
-    //printf("\n");
     printf("\nКоличество единиц в числе %d: %d\n", num, cnt_bits);
     return 0;
 }
