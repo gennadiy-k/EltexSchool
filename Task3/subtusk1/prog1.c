@@ -7,7 +7,7 @@ int main() {
 
     printf("Введите число А:");
     scanf("%d", &A);
-    ptr = (char *)&A;
+    ptr = (unsigned char *)&A;
     printf("16-e представление числа А: %X\n", A);
     
     while(N) {
