@@ -4,7 +4,6 @@
 
 int main() {
     int flag = 1;
-    int cnt = 0;
     int sw;
 
     struct Node *head = NULL;
@@ -24,8 +23,7 @@ int main() {
         while (getchar() != '\n'); //очистка буфера
         switch (sw) {
             case 1:
-                // if(cnt < user_cnt){ //условие для контроля числа абонентов, сохранено по прошлому условию ДЗ в 100 пользователей
-                fill_arr(Name, Second_name, Tel, &cnt);
+                fill_arr(Name, Second_name, Tel);
                 add_node(&head, &tail, Name, Second_name, Tel);
                 break;
             case 2:

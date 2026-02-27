@@ -15,7 +15,7 @@ struct Node {
 };
 
 /* Прототипы пользовательских функций */
-void fill_arr(char*, char*, char*, int*);
+void fill_arr(char*, char*, char*);
 struct Node* create_node(char*, char*, char*);
 void add_node(struct Node**, struct Node**, char*, char*, char*);
 void delete_list(struct Node**, struct Node**);

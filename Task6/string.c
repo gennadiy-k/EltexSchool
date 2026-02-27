@@ -38,7 +38,7 @@ void add_node(struct Node **head, struct Node **tail, char* nName, char* nSec_na
     }
 }
 /* Фукнция fill_arr заполняет строки до создания узла для последующего заполнения соответсвующих полей массива структур*/
-void fill_arr(char* Name_arr, char* Sec_name_arr, char* Phone_arr, int* cnt) {
+void fill_arr(char* Name_arr, char* Sec_name_arr, char* Phone_arr) {
     printf("Имя:\n");
     fgets(Name_arr, N, stdin);
     Name_arr[strcspn(Name_arr, "\n")] = 0; //для вывода данных абонента одной строкой
@@ -50,7 +50,6 @@ void fill_arr(char* Name_arr, char* Sec_name_arr, char* Phone_arr, int* cnt) {
     printf("Номер телефона:\n");
     fgets(Phone_arr, N, stdin);
     Phone_arr[strcspn(Phone_arr, "\n")] = 0; //для вывода данных абонента одной строкой
-    (*cnt)++;
 }
 /* Фукнция delete_list удаляет абонента целиком и */
 void delete_list(struct Node** head, struct Node** tail) {
