@@ -94,15 +94,12 @@ void find_list(struct Node* tail) {
     printf("Введите имя для поиска: \n");
     fgets(name_cmp, 10, stdin);
     name_cmp[strcspn(name_cmp, "\n")] = 0; //удаляем \n (на всякий случай для одинакового сравнения)
-    // while(ptr != NULL) {
-    //     printf("%3d) Имя: %s, Фамилия: %s, Номер телефона: %s\n", i+1, (list+i)->name, (list+i)->second_name, (list+i)->tel);
-    // }
     while(ptr != NULL) {
     i++;
         if (strcmp(name_cmp, ptr->data.name) == 0) {
             printf("%3d) Имя: %s, Фамилия: %s, Номер телефона: %s\n", i, ptr->data.name, ptr->data.second_name, ptr->data.tel);
+            f++;
         }
-    f++;
     ptr = ptr->prev;
     }
     if (f == 0)
