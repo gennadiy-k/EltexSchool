@@ -28,7 +28,7 @@ int main() {
                 else {
                     printf("Справочник переполнен.\n");
                 }
-                continue;
+                break;
             case 2:
                 delete_list(list);
                 break;
