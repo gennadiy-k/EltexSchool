@@ -36,6 +36,7 @@ int main() {
         write(fd, string, strlen(string)+1);
         close(fd);
         wait(&status);
+        unlink("fifo1");
         exit(EXIT_SUCCESS);
     }
     return 0;
