@@ -7,9 +7,7 @@
 typedef enum {
     MSG_CONNECT,        // Пользователь подключается (передает имя)
     MSG_OLD_CONNECT,    // Старый пользователь
-    MSG_TEXT,           // Текстовое сообщение
-    MSG_SYSTEM,         // Системное уведомление 
-    MSG_DISCONNECT      // Клиент выходит
+    MSG_TEXT            // Текстовое сообщение     
 } EventType;
 
 typedef struct msgbuf {
