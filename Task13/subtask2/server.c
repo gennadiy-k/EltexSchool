@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <sys/types.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -32,7 +33,7 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    if (mq_send(mqd_to_cli, message, sizeof(message), 1) == -1) {
+    if (mq_send(mqd_to_cli, message, strlen(message) + 1, 1) == -1) {
         perror("Ошибка mq_send (server)");
         exit(EXIT_FAILURE);
     }
