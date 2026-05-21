@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <sys/types.h>
+#include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>         
@@ -29,11 +30,11 @@ int main() {
 
     printf("Получено сообщение (клиент): %s\n", client_buf);
 
-    if (mq_send(mqd_to_srv, "Hello", 6, 2) == -1) {
+    if (mq_send(mqd_to_srv, message, strlen(message) + 1, 2) == -1) {
         perror("Ошибка mq_send (client)");
         exit(EXIT_FAILURE);
     }
-    printf("Отправлено сообщение (клиент): %s\n", "Hello");
+    printf("Отправлено сообщение (клиент): %s\n", message);
 
     mq_close(mqd_to_cli);
     mq_close(mqd_to_srv);
