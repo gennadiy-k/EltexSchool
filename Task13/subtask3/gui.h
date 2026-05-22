@@ -5,7 +5,6 @@
 #include <ncurses.h>
 #include "message.h"
 
-#define MAX_USERS 10
 
 /* Определение структуры для 3-х окон */
 typedef struct windows {

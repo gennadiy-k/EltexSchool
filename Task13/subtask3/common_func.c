@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <pthread.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
 #include <errno.h>
+
 #include "gui.h"       
 #include "message.h"   
 
@@ -54,6 +55,27 @@ void* client_receiver_thread(void* arg) {
     }    
     return NULL;
 
+}
+
+void* server_console_thread(void* arg) {
+
+    ServerCtrl *ctrl = (ServerCtrl*)arg;
+    char command[20];
+    
+    while (ctrl->flag) { 
+        if (fgets(command, sizeof(command), stdin) == NULL) {
+            continue;
+        }
+
+        command[strcspn(command, "\n")] = 0; 
+
+        if (strcmp(command, "exit") == 0) {
+            ctrl->flag = 0; 
+            msgctl(ctrl->msqid, IPC_RMID, NULL); 
+            break;
+        }
+    }
+    return NULL;
 }
    
 

@@ -10,24 +10,27 @@
 #include <sys/ipc.h>    
 #include <sys/msg.h> 
 #include <errno.h>
+
 #include "gui.h"
 #include "message.h"
 
 
 int main() {
     
+    pthread_t console_TID;
     Message active_users[MAX_USERS];
     Message msg;
 
     int total_users = 0;
-    char ch;
-    int flag = 1;
 
     char chat_history[MAX_HISTORY][256];
     char history_aut[MAX_HISTORY][64];
     int history_head = 0;
     int history_size = 0;
 
+    ServerCtrl ctrl;
+    ctrl.flag = 1; 
+    ctrl.msqid = 0;
 
     key_t key = ftok("./server", 1);
     if (key == -1) {
@@ -35,23 +38,24 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    int old_msqid = msgget(key, 0666);
-    if (old_msqid != -1) {
-        msgctl(old_msqid, IPC_RMID, NULL); // Стираем старый хвост из памяти ОС
-        printf("[СЕРВЕР] Обнаружена и удалена старая очередь ID: %d\n", old_msqid);
-    }
-
-    int msqid = msgget(key, IPC_CREAT | 0666);
-    if (msqid == -1) {
+    ctrl.msqid = msgget(key, IPC_CREAT | 0666);
+    if (ctrl.msqid == -1) {
         perror("Ошибка вызова msgget (server)");
         exit(EXIT_FAILURE);
     }
-    printf("[СЕРВЕР] Очередь создана. ID: %d\n", msqid);
 
-    while (flag) {
+    printf("[СЕРВЕР] Очередь создана. ID: %d\n", ctrl.msqid);
+    printf("[СЕРВЕР] Введи 'exit' в консоль для закрытия.\n");
+
+    pthread_create(&console_TID, NULL, server_console_thread, (void*)&ctrl); // Создаем поток для обработки ввода комманды exit в консоли
+
+    while (ctrl.flag) {
         // Читаем из очереди сообщения (сообщения к серверу)
-        if (msgrcv(msqid, &msg, sizeof(Message) - sizeof(long), 1, 0) == -1) {
-            perror("Ошибка чтения msgrcv (server)");
+        if (msgrcv(ctrl.msqid, &msg, sizeof(Message) - sizeof(long), 1, 0) == -1) {
+            if (!ctrl.flag) {
+                break;
+            }
+            perror("Ошибка вызова msgrcv (server)");
             break;
         }
         // Обрабатываем подключение нового пользователю
@@ -68,7 +72,7 @@ int main() {
                     old_user_msg.client_pid = active_users[i].client_pid;
                     strcpy(old_user_msg.username, active_users[i].username);
                     memset(old_user_msg.text, 0, sizeof(old_user_msg.text)); 
-                    msgsnd(msqid, &old_user_msg, sizeof(Message) - sizeof(long), 0);
+                    msgsnd(ctrl.msqid, &old_user_msg, sizeof(Message) - sizeof(long), 0);
                 }
 
                 // Сохраняем нового пользователя в массив
@@ -93,14 +97,14 @@ int main() {
                     strcpy(history_msg.username, history_aut[current_index]);
                     strcpy(history_msg.text, chat_history[current_index]);
                     
-                    msgsnd(msqid, &history_msg, sizeof(Message) - sizeof(long), 0);
+                    msgsnd(ctrl.msqid, &history_msg, sizeof(Message) - sizeof(long), 0);
                 }
 
                 // Оповещаем всех участников о входе нового пользователя
                 for (int i = 0; i < total_users; i++) {
                     msg.mtype = active_users[i].client_pid; 
                     msg.type = MSG_CONNECT; 
-                    msgsnd(msqid, &msg, sizeof(Message) - sizeof(long), 0);
+                    msgsnd(ctrl.msqid, &msg, sizeof(Message) - sizeof(long), 0);
                 }
             }
         }
@@ -124,12 +128,14 @@ int main() {
             for (int i = 0; i < total_users; i++) {
                 long recv_pid = active_users[i].client_pid;
                 msg.mtype = recv_pid;
-                if (msgsnd(msqid, &msg, sizeof(Message) - sizeof(long), 0)) {
+                if (msgsnd(ctrl.msqid, &msg, sizeof(Message) - sizeof(long), 0)) {
                     perror("Ошибка отправки msgsnd (server)");
                 }
             }
         }
     }
 
+    pthread_join(console_TID, NULL);
+    printf("[СЕРВЕР] Завершение работы.\n");
     return 0;
 }

@@ -2,7 +2,12 @@
 #define MESSAGE_H
 
 #define MAX_HISTORY 50 // Количество сообщений (сохраненных)
+#define MAX_USERS 10   // Количество пользователей 
 
+typedef struct {
+    int flag;
+    int msqid;
+} ServerCtrl;
 
 typedef enum {
     MSG_CONNECT,        // Пользователь подключается (передает имя)
@@ -19,5 +24,5 @@ typedef struct msgbuf {
 } Message;
 
 void* client_receiver_thread(void* arg);
-
+void* server_console_thread(void* arg);
 #endif

@@ -1,14 +1,14 @@
 TARGET1 = server
 TARGET2 = client
 
-OBJS_CLIENT = client.o gui.o client_rcv_func.o
-OBJS_SERVER = server.o
+OBJS_CLIENT = client.o gui.o common_func.o
+OBJS_SERVER = server.o common_func.o
 
 all: $(TARGET1) $(TARGET2)
 
 #Сборка программы
 $(TARGET1): $(OBJS_SERVER)
-		gcc $(OBJS_SERVER) -o $(TARGET1) 
+		gcc $(OBJS_SERVER) -o $(TARGET1) -lncurses -lpthread
 
 $(TARGET2): $(OBJS_CLIENT)
 		gcc $(OBJS_CLIENT) -o $(TARGET2) -lncurses -lpthread
@@ -24,8 +24,8 @@ client.o: client.c message.h gui.h
 gui.o: gui.c message.h gui.h
 		gcc -c gui.c -o gui.o
 
-client_rcv_func.o: client_rcv_func.c message.h gui.h
-		gcc -c client_rcv_func.c -o client_rcv_func.o
+common_func.o: common_func.c message.h gui.h
+		gcc -c common_func.c -o common_func.o
 
 #Запуск
 run: all
