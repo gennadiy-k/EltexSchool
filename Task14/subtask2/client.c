@@ -37,6 +37,8 @@ int main() {
         exit(EXIT_FAILURE);        
     }
     
+    close(fd);
+
     sem_wait(sem_server);
     printf("Получено сообщение (клиент): %s\n", shmp);
     
@@ -44,6 +46,8 @@ int main() {
     printf("Отправлено сообщение (клиент): %s\n", shmp);
 
     sem_post(sem_client);
+
+    munmap(shmp, MEM_SIZE);
 
     exit(EXIT_SUCCESS);
 }

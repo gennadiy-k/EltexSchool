@@ -43,12 +43,15 @@ int main() {
         exit(EXIT_FAILURE);        
     }
 
-    sem_post(sem_server);
+    close(fd);
 
     memcpy(shmp, msg, strlen(msg) + 1);
     printf("Отправлено сообщение (сервер): %s\n", shmp);
 
+    sem_post(sem_server);
+
     sem_wait(sem_client);
+    
     printf("Получено сообщение (сервер): %s\n", shmp);
 
     munmap(shmp, MEM_SIZE);
