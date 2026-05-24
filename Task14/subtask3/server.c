@@ -47,14 +47,14 @@ int main() {
         perror("Ошибка mmap (server)");
         exit(EXIT_FAILURE);        
     }
-
+    close(shm_fd);
     memset(shmp, 0, sizeof(ChatSHM));
 
     ctrl.flag = 1;               
     ctrl.sem_srv_cnt = sem_srv_cnt;
 
     printf("[СЕРВЕР] Чат запущен.\n");
-    printf("[СЕРВЕР] Введи 'exit' в консоль для закрытия.\n");
+    printf("[СЕРВЕР] Команда 'exit' для завершения работы.\n");
 
     pthread_create(&console_TID, NULL, server_console_thread, (void*)&ctrl); // Создаем поток для обработки ввода комманды exit в консоли
 

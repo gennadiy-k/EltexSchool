@@ -37,6 +37,8 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
+    close(shm_fd);
+    
     gui.shmp = shmp;
     init_curses(&gui);
     
