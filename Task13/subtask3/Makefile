@@ -8,7 +8,7 @@ all: $(TARGET1) $(TARGET2)
 
 #Сборка программы
 $(TARGET1): $(OBJS_SERVER)
-		gcc $(OBJS_SERVER) -o $(TARGET1) -pthread
+		gcc $(OBJS_SERVER) -o $(TARGET1) -lncurses -pthread
 
 $(TARGET2): $(OBJS_CLIENT)
 		gcc $(OBJS_CLIENT) -o $(TARGET2) -lncurses -pthread
