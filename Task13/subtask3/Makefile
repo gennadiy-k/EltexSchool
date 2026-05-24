@@ -8,10 +8,10 @@ all: $(TARGET1) $(TARGET2)
 
 #Сборка программы
 $(TARGET1): $(OBJS_SERVER)
-		gcc $(OBJS_SERVER) -o $(TARGET1) -lncurses -lpthread
+		gcc $(OBJS_SERVER) -o $(TARGET1) -pthread
 
 $(TARGET2): $(OBJS_CLIENT)
-		gcc $(OBJS_CLIENT) -o $(TARGET2) -lncurses -lpthread
+		gcc $(OBJS_CLIENT) -o $(TARGET2) -lncurses -pthread
 
 
 #Сборка объектных модулей
