@@ -45,7 +45,7 @@ int main() {
     }
 
     printf("[СЕРВЕР] Очередь создана. ID: %d\n", ctrl.msqid);
-    printf("[СЕРВЕР] Введи 'exit' в консоль для закрытия.\n");
+    printf("[СЕРВЕР] Команда 'exit' для завершения работы.\n");
 
     pthread_create(&console_TID, NULL, server_console_thread, (void*)&ctrl); // Создаем поток для обработки ввода комманды exit в консоли
 
@@ -134,7 +134,7 @@ int main() {
             }
         }
     }
-
+    pthread_cancel(console_TID);
     pthread_join(console_TID, NULL);
     printf("[СЕРВЕР] Завершение работы.\n");
     return 0;
