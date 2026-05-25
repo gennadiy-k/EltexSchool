@@ -122,6 +122,11 @@ int main() {
     sem_close(sem_srv_cnt);
     sem_close(sem_cli);
 
+    shm_unlink(SHM_SERVER);
+    sem_unlink(SEM_SERVER);
+    sem_unlink(SEM_SERVER_CNT);
+    sem_unlink(SEM_CLIENT);
+    
     printf("[СЕРВЕР] Завершение работы.\n");
     return 0;
 }

@@ -113,11 +113,6 @@ void* server_console_thread(void* arg) {
         if (strcmp(command, "exit") == 0) {
             ctrl->flag = 0; 
 
-            shm_unlink(SHM_SERVER);
-            sem_unlink(SEM_SERVER);
-            sem_unlink(SEM_SERVER_CNT);
-            sem_unlink(SEM_CLIENT);
-
             sem_post(ctrl->sem_srv_cnt);
             break;
         }
