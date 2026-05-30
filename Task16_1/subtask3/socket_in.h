@@ -1,5 +1,5 @@
-#ifndef SOCKET_UN_H
-#define SOCKET_UN_H
+#ifndef SOCKET_IN_H
+#define SOCKET_IN_H
 
 #define BUF_SIZE 64
 #define PORT_NUM 50002
