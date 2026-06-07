@@ -1,0 +1,34 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+#include "socket_in.h"
+
+int main() {
+    int fd;
+    struct sockaddr_in addr;
+    char msg[] = "Multicast test";
+
+    if ((fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+        perror("socket");
+        exit(EXIT_FAILURE);
+    }
+
+    memset(&addr, 0, sizeof(addr));
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(PORT_NUM);
+    if (inet_pton(AF_INET, IP_ADDR, &addr.sin_addr) <= 0) {
+        perror("inet_pton");
+        exit(EXIT_FAILURE);
+    }
+
+    for (int i = 0; i < 10; i++) {
+        sendto(fd, msg, sizeof(msg), 0, (struct sockaddr *)&addr, sizeof(addr));
+        printf("Сервер | Отправлено #%d: %s\n", i + 1, msg);
+        sleep(1);
+    }
+
+    close(fd);
+    return 0;
+}
