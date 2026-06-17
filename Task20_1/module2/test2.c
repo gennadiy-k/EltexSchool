@@ -24,7 +24,7 @@ ssize_t test_write(struct file *fd, const char __user *buff, size_t size, loff_t
     size_t rc = 0;
     if (size > 15)
         return -EINVAL;
-
+    // Отредактировано
     write_lock(&lock);
     if (__copy_from_user(test_string, buff, size) == 0) {
         rc = size;
@@ -32,7 +32,7 @@ ssize_t test_write(struct file *fd, const char __user *buff, size_t size, loff_t
         rc = -EFAULT;
     }
     write_unlock(&lock);
-
+    // Отредактировано
     return rc;
 }
 
@@ -46,7 +46,7 @@ int init_module(void)
 {
     pr_info("Test module is loaded.\n");
     rwlock_init(&lock);
-    major = register_chrdev(major, "test3", &fops);
+    major = register_chrdev(major, "test2", &fops);
 
     if (major < 0)
         return major;
@@ -57,7 +57,7 @@ int init_module(void)
 
 void cleanup_module(void)
 {
-    unregister_chrdev(major, "test3");
+    unregister_chrdev(major, "test2");
 }
 
 MODULE_LICENSE("GPL");
