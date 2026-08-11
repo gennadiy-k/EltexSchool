@@ -1,31 +1,28 @@
-TARGET1 = server
-TARGET2 = client
+CC = gcc
+CFLAGS = -Wall -Wextra -Iinclude
 
-all: $(TARGET1) $(TARGET2)
+SRC_DIR = src
+OBJ_DIR = obj
+BIN_DIR = bin
 
-# Сборка программы 
-$(TARGET1): server.o clients_list.o
-	gcc server.o clients_list.o -o $(TARGET1)
-
-$(TARGET2): client.o
-	gcc client.o -o $(TARGET2)
-
-# Сборка объектных модулей
-server.o: server.c socket_in.h clients_list.h
-	gcc -c server.c -o server.o
-		
-client.o: client.c socket_in.h
-	gcc -c client.c -o client.o
-
-clients_list.o: clients_list.c clients_list.h socket_in.h
-	gcc -c clients_list.c -o clients_list.o
-
-# Запуск
-run: all
-	sudo ./$(TARGET1)
-
-# Очистка
 .PHONY: all clean
 
+all: $(BIN_DIR)/server $(BIN_DIR)/client
+
+# Сборка исполняемых файлов
+$(BIN_DIR)/server: $(OBJ_DIR)/server.o $(OBJ_DIR)/clients_list.o
+	mkdir -p $(BIN_DIR)
+	$(CC) $^ -o $@
+
+$(BIN_DIR)/client: $(OBJ_DIR)/client.o
+	mkdir -p $(BIN_DIR)
+	$(CC) $^ -o $@
+
+# Сборка объектных модулей
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Очистка
 clean:
-	rm -rf *.o $(TARGET1) $(TARGET2)
+	rm -rf $(OBJ_DIR) $(BIN_DIR)

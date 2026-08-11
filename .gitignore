@@ -1,0 +1,12 @@
+*
+!*/
+!*.c
+!*.h
+!*.sh
+!Makefile
+!*.md
+!.gitignore
+!Dockerfile
+!*.yml
+!*.yaml
+!*.pdf

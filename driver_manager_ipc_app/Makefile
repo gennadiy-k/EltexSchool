@@ -1,27 +1,31 @@
-TARGET = cli_app
+CC = gcc
+CFLAGS = -Wall -Wextra -Iinclude
 
-all: $(TARGET)
+SRC_DIR = src
+OBJ_DIR = obj
+BIN_DIR = bin
 
-# Сборка программы 
-$(TARGET): cli_main.o driver.o cli_manager.o
-	gcc cli_main.o driver.o cli_manager.o -o $(TARGET)
+SRCS = $(wildcard $(SRC_DIR)/*.c)
+OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
+
+.PHONY: all clean
+
+all: $(BIN_DIR)/cli_app
+
+# Сборка исполняемого файла
+$(BIN_DIR)/cli_app: $(OBJS)
+	mkdir -p $(BIN_DIR)
+	$(CC) $^ -o $@
 
 # Сборка объектных модулей
-cli_main.o: cli_main.c cmn_types.h driver.h cli_manager.h
-	gcc -c cli_main.c -o cli_main.o
-
-driver.o: driver.c cmn_types.h driver.h
-	gcc -c driver.c -o driver.o
-
-cli_manager.o: cli_manager.c cmn_types.h cli_manager.h
-	gcc -c cli_manager.c -o cli_manager.o
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 # Запуск
 run: all
-	./$(TARGET)
+	$(BIN_DIR)/cli_app
 
 # Очистка
-.PHONY: all clean
-
 clean:
-	rm -rf *.o $(TARGET)
+	rm -rf $(OBJ_DIR) $(BIN_DIR)

@@ -1,0 +1,40 @@
+services:
+  # Настройка контейнера сервера
+  eth_server:
+    build: .
+    container_name: my_server
+    cap_add:
+      - NET_ADMIN       # Разрешаем управление сетью
+      - NET_RAW         # Разрешаем использование RAW-сокетов
+    volumes:
+      - .:/app          # Монтируем код в контейнер
+    networks:
+      my_test_net:
+        ipv4_address: 172.20.0.3
+    mac_address: ba:fa:46:d2:f3:65    # MAC адрес контейнера сервера
+    command: sh -c "make server && stdbuf -o0 ./server"
+
+  # Настройка контейнера клиента
+  eth_client:
+    build: .
+    container_name: my_client
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    volumes:
+      - .:/app
+    networks:
+      my_test_net:
+        ipv4_address: 172.20.0.2
+    command: sh -c "make client && stdbuf -o0 ./client"
+
+# Создание сети macvlan
+networks:
+  my_test_net:
+    driver: macvlan
+    driver_opts:
+      parent: wlp0s20f3    # Имя сетевой карты
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1

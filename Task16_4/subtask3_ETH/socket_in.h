@@ -10,6 +10,6 @@
 #define SERVER_IP "172.20.0.3"
 
 // Имя виртуального сетевого интерфейса контейнера 
-#define INTERFACE_NAME "eth1"
+#define INTERFACE_NAME "eth0"
 
 #endif
